@@ -1,0 +1,53 @@
+
+// method 1: BFS (time limit exceed)
+
+class Solution {
+    public List<List<Integer>> combine(int n, int k) {
+        List<List<Integer>> res = new ArrayList<>();
+        res.add(new ArrayList<Integer>());
+        
+        while(k-- >0) {
+            int len = res.size();
+            
+            for(int i=0; i<len; i++) {
+                List<Integer> t = res.get(0);
+                int j = t.size() == 0 ? 1:t.get(t.size()-1)+1;
+                for(; j<=n; j++) {
+                    ArrayList<Integer> tmp = new ArrayList<>(t);
+                    tmp.add(j);
+                    res.add(tmp);
+                }
+                res.remove(0);
+            }
+        }
+        return res;
+    }
+}
+
+
+// method 2: DFS (better solution)
+
+class Solution {
+    public List<List<Integer>> combine(int n, int k) {
+        List<List<Integer>> res = new ArrayList<>();
+        dfs(res, new ArrayList<Integer>(), n, 1,0,k);
+        return res;
+    }
+    
+    private void dfs(List<List<Integer>> res, List<Integer> path, int n, int curVal, 
+                     int curSize, int k) {
+        if(curSize == k) {
+            res.add(new ArrayList<Integer>(path));
+            return;
+        }
+        if(curSize>k || curVal>n) return;
+        
+        // not add curVal
+        dfs(res, path, n, curVal+1, curSize, k);
+        
+        // add curVal
+        path.add(curVal);
+        dfs(res, path, n, curVal+1, curSize+1, k);
+        path.remove(path.size()-1);
+    }
+}
