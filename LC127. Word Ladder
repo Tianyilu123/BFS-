@@ -1,0 +1,40 @@
+
+class Solution {
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        if(beginWord == null || endWord == null || wordList == null)
+            throw new IllegalArgumentException("data is missing");
+        HashSet<String> wordSet = new HashSet<>();
+        
+        for(String word : wordList) {
+            wordSet.add(word);
+        }
+        
+        Queue<String> queue = new LinkedList<>();
+        queue.offer(beginWord);
+        int minDis = 1;
+        
+        while(!queue.isEmpty()) {
+            int size = queue.size();
+            while(size-- >0) {
+                String cur = queue.poll();
+                char[] cc = cur.toCharArray();
+                for(int i=0; i<cc.length; i++) {
+                    char tmp = cc[i];
+                    for(char c ='a'; c<='z'; c++) {
+                        cc[i] = c;
+                        String str = String.valueOf(cc);
+                        if(c != tmp && wordSet.contains(str)) {
+                            if(str.equals(endWord))
+                                return minDis + 1;
+                            queue.offer(str);
+                            wordSet.remove(str);
+                        }
+                    }
+                    cc[i] = tmp;
+                }
+            }
+            minDis++;
+        }
+        return 0;
+    }
+}
