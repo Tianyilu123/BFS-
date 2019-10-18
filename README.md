@@ -1,3 +1,3 @@
 # BFS-
 
-23, 24 practices
+total 24 practices 
