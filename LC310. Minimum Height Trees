@@ -1,0 +1,67 @@
+
+class Solution {
+    public List<Integer> findMinHeightTrees(int n, int[][] edges) {
+        List<Integer> res = new ArrayList<>();
+        if(n==1) {
+            res.add(0);
+            return res;
+        }
+        
+        int nodePool = n;
+        TreeNode[] vs = new TreeNode[n];
+        for(int i=0; i<n; i++)
+            vs[i] = new TreeNode(i);
+        for(int[] arr : edges) {
+            vs[arr[0]].addNei(arr[1]);
+            vs[arr[1]].addNei(arr[0]);
+        }
+        
+        Queue<Integer> queue = new LinkedList<>();
+        for(int i=0; i<n; i++) {
+            if(vs[i].isLeave()) {
+                queue.add(i);
+                nodePool--;
+            }
+        }
+        
+        while(nodePool > 0) {
+            int size = queue.size();
+            while(size-- >0) {
+                int cur = queue.poll();
+                for(int i : vs[cur].nei) {
+                    vs[i].removeNei(cur);
+                    if(vs[i].isLeave()) {
+                        queue.add(i);
+                        nodePool--;
+                    }
+                }
+            }
+        }
+        
+        for(int i : queue)
+            res.add(i);
+        return res;
+    }
+    
+    private class TreeNode{
+        public HashSet<Integer> nei;
+        public int label;
+        
+        public TreeNode(int label) {
+            this.label = label;
+            this.nei = new HashSet<Integer>();
+        }
+        
+        public void addNei(Integer label) {
+            this.nei.add(label);
+        }
+        
+        public void removeNei(Integer label) {
+            nei.remove(label);
+        }
+        
+        public boolean isLeave() {
+            return nei.size() == 1;
+        }
+    }
+}
