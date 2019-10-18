@@ -1,1 +1,56 @@
 
+class Solution {
+    
+    class Point {
+        int row, col;
+        public Point(int row, int col) {
+            this.row = row;
+            this.col = col;
+        }
+    }
+    
+    public void wallsAndGates(int[][] rooms) {
+        if(rooms == null || rooms.length == 0 || rooms[0].length == 0) return;
+        Queue<Point> queue = new LinkedList<>();
+        for(int i=0; i<rooms.length; i++) {
+            for(int j=0; j<rooms[0].length; j++) {
+                if(rooms[i][j] == 0){
+                    queue.offer(new Point(i,j));
+                }
+            }
+        }
+        
+        int minLen = 1;
+        
+        while(!queue.isEmpty()) {
+            int size = queue.size();
+            while(size-- >0) {
+                Point cur = queue.poll();
+                List<Point> tmp = convert(cur, rooms);
+                for(Point p : tmp) {
+                    int i=p.row, j=p.col;
+                    if(rooms[i][j] == Integer.MAX_VALUE) {
+                        rooms[i][j] = minLen;
+                        queue.offer(p);
+                    }
+                }
+            }
+            minLen++;
+        }
+    }
+    
+    public List<Point> convert(Point p, int[][] grid) {
+        List<Point> list = new ArrayList<>();
+        int i = p.row, j = p.col;
+        int row = grid.length, col = grid[0].length;
+        int[][] dirs = {{-1,0},{1,0},{0,-1},{0,1}};
+        for(int[] dir : dirs) {
+            int ii = i + dir[0];
+            int jj = j + dir[1];
+            if(ii>=0 && ii<row && jj>=0 && jj<col) {
+                list.add(new Point(ii, jj));
+            }
+        }
+        return list;
+    }
+}
