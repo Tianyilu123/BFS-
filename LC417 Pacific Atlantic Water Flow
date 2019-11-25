@@ -44,20 +44,22 @@ class Solution {
         int[][] dirs = {{-1,0},{1,0},{0,-1},{0,1}};
         while(!queue.isEmpty()) {
             int[] cur = queue.poll();
-            if(otherSet[cur[0]][cur[1]]) {
-                List<Integer> tmp = new ArrayList<>();
-                tmp.add(cur[0]); tmp.add(cur[1]);
-                res.add(tmp);
-            }
             
             for(int[] dir : dirs) {
                 int ii = cur[0] + dir[0], jj = cur[1] + dir[1];
-                if(ii>=0 && ii<row && jj>=0 && jj<col && matrix[cur[0]][cur[1]] <= matrix[ii][jj]) {
+                if(ii>=0 && ii<row && jj>=0 && jj<col && 
+                                    matrix[cur[0]][cur[1]] <= matrix[ii][jj]) {
                     if(!selfSet[ii][jj]) {
                         queue.offer(new int[]{ii, jj});
                         selfSet[ii][jj] = true;
                     }
                 }
+            }
+            
+            if(otherSet[cur[0]][cur[1]]) {
+                List<Integer> tmp = new ArrayList<>();
+                tmp.add(cur[0]); tmp.add(cur[1]);
+                res.add(tmp);
             }
         }
     }
